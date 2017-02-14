@@ -52,7 +52,7 @@ case "$CERTTYPE" in
     exit 1
 esac
 
-if [ -d $CERTDIR ]; then
+if [[ -d $CERTDIR ]]; then
   # certificate renewal
   ACMEACTION="--renew"
   if [ "$CERTTYPE" = "ecc" ]; then
