@@ -28,7 +28,7 @@ ZCLI=$(locate zcli 2>/dev/null | egrep "bin/zcli$")
 [ -z "$ZCLI" ] && ZCLI=$(find / -name zcli | egrep "bin/zcli$")
 
 if [ -z "$ZCLI" ]; then
-  echo "Can't find zcli command"
+  echo "Can't find zcli command: $ZCLI"
   exit 1
 fi
 
