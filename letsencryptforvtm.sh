@@ -9,12 +9,22 @@
 # may be run manually: ./letsencryptforvtm.sh --issue c_vadc.bedis9.net_rsa
 #set -x
 
+# TODO: document need for filename versioning of this script
+
+# TODO: resolve acme.sh dependency into platform options
+
+# TODO: verify certname integrity, naming prefix
+
+# TODO: understand and document necessity for _ecc/rsa
+
+# TODO: verify regex vs. whitespace
 if [[ $1 == "--issue" ]]; then
   CERTNAME=${2}
 else
   # $1 is eventtype and my be ignored
   CERTNAME=$(echo "${2}" | sed -n "s/.*'\([^']\+\)'.*/\1/p")
 fi
+# TODO: verify object names with underscore break this, document
 CERTFILE=$(echo "${CERTNAME}" | cut -d'_' -f 2)
 CERTTYPE=$(echo "${CERTNAME}" | cut -d'_' -f 3)
 
@@ -61,7 +71,10 @@ else
   ACMEACTION="--issue"
 fi
 
+# TODO: replace with array of arguments to stabilize parsing and whitespace
 "$ACMEHOME/acme.sh" $TEST $ACMEOPTIONS $ACMEACTION -d "${CERTFILE}" $ACMEKEY
+
+# TODO: verify replacement here as \n arg to setRaw, document purpose
 
 # key
 key=$(cat "$CERTDIR/${CERTFILE}.key")
@@ -71,6 +84,7 @@ key=${key//$'\n'/\\n}
 crt=$(cat "$CERTDIR/fullchain.cer")
 crt=${crt//$'\n'/\\n}
 
+# TODO: verify breakage with whitespace object names, identify fix
 echo "Catalog.SSL.Certificates.setRawCertificate ${CERTNAME} \"$crt\" " > "$CERTDIR/zcli_${CERTFILE}.script"
 if $ZCLI "$CERTDIR/zcli_${CERTFILE}.script"; then
   echo "Catalog.SSL.Certificates.importCertificate ${CERTNAME} { private_key: \"$key\", public_cert: \"$crt\" }" > "$CERTDIR/zcli_${CERTFILE}.script"
