@@ -9,7 +9,7 @@
 # may be run manually: ./letsencryptforvtm.sh --issue c_vadc.bedis9.net_rsa
 #set -x
 
-if [ "$1" = "--issue" ]; then
+if [[ $1 == "--issue" ]]; then
   CERTNAME=${2}
 else
   # $1 is eventtype and my be ignored
