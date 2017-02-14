@@ -41,11 +41,11 @@ ACMEOPTIONS="--standalone --httpport 88"
 case "$CERTTYPE" in
   ecc)
     ACMEKEY="--keylength ec-256"
-    CERTDIR=$ACMEHOME/${CERTFILE}_${CERTTYPE}
+    CERTDIR="$ACMEHOME/${CERTFILE}_${CERTTYPE}"
     ;;
   rsa)
     ACMEKEY="--keylength 2048"
-    CERTDIR=$ACMEHOME/${CERTFILE}
+    CERTDIR="$ACMEHOME/${CERTFILE}"
     ;;
   *)
     echo "error: wrong CERTTYPE"
@@ -63,21 +63,21 @@ else
   ACMEACTION="--issue"
 fi
 
-$ACMEHOME/acme.sh $TEST $ACMEOPTIONS $ACMEACTION -d ${CERTFILE} $ACMEKEY
+"$ACMEHOME/acme.sh" $TEST $ACMEOPTIONS $ACMEACTION -d "${CERTFILE}" $ACMEKEY
 
 # key
-key=$(cat $CERTDIR/${CERTFILE}.key)
+key=$(cat "$CERTDIR/${CERTFILE}.key")
 key=${key//$'\n'/\\n}
 
 # crt
-crt=$(cat $CERTDIR/fullchain.cer)
+crt=$(cat "$CERTDIR/fullchain.cer")
 crt=${crt//$'\n'/\\n}
 
-echo "Catalog.SSL.Certificates.setRawCertificate ${CERTNAME} \"$crt\" " > $CERTDIR/zcli_${CERTFILE}.script
-$ZCLI $CERTDIR/zcli_${CERTFILE}.script
+echo "Catalog.SSL.Certificates.setRawCertificate ${CERTNAME} \"$crt\" " > "$CERTDIR/zcli_${CERTFILE}.script"
+$ZCLI "$CERTDIR/zcli_${CERTFILE}.script"
 if [ $? -ne 0 ]; then
-  echo "Catalog.SSL.Certificates.importCertificate ${CERTNAME} { private_key: \"$key\", public_cert: \"$crt\" }" > $CERTDIR/zcli_${CERTFILE}.script
-  $ZCLI $CERTDIR/zcli_${CERTFILE}.script
+  echo "Catalog.SSL.Certificates.importCertificate ${CERTNAME} { private_key: \"$key\", public_cert: \"$crt\" }" > "$CERTDIR/zcli_${CERTFILE}.script"
+  $ZCLI "$CERTDIR/zcli_${CERTFILE}.script"
 fi
 
 echo "Done!"
