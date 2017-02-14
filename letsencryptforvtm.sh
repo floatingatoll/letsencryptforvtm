@@ -18,7 +18,7 @@ fi
 CERTFILE=$(echo "${CERTNAME}" | cut -d'_' -f 2)
 CERTTYPE=$(echo "${CERTNAME}" | cut -d'_' -f 3)
 
-if [[ -z "$CERTNAME" ]] || [[ -z "$CERTFILE" ]] || [[ -z "$CERTTYPE" ]]; then
+if [[ -z "$CERTNAME" || -z "$CERTFILE" || -z "$CERTTYPE" ]]; then
   echo "error, can't figure out CERTNAME or CERTFILE or CERTTYPE"
   exit 1
 fi
