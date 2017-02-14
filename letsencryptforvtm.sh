@@ -74,8 +74,7 @@ crt=$(cat "$CERTDIR/fullchain.cer")
 crt=${crt//$'\n'/\\n}
 
 echo "Catalog.SSL.Certificates.setRawCertificate ${CERTNAME} \"$crt\" " > "$CERTDIR/zcli_${CERTFILE}.script"
-$ZCLI "$CERTDIR/zcli_${CERTFILE}.script"
-if [ $? -ne 0 ]; then
+if $ZCLI "$CERTDIR/zcli_${CERTFILE}.script"; then
   echo "Catalog.SSL.Certificates.importCertificate ${CERTNAME} { private_key: \"$key\", public_cert: \"$crt\" }" > "$CERTDIR/zcli_${CERTFILE}.script"
   $ZCLI "$CERTDIR/zcli_${CERTFILE}.script"
 fi
