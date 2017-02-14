@@ -23,9 +23,7 @@ if [[ -z "$CERTNAME" || -z "$CERTFILE" || -z "$CERTTYPE" ]]; then
   exit 1
 fi
 
-ZCLI=$(locate zcli 2>/dev/null | egrep "bin/zcli$")
-[ -z "$ZCLI" ] && ZCLI=$(which zcli)
-[ -z "$ZCLI" ] && ZCLI=$(find / -name zcli | egrep "bin/zcli$")
+[[ -n $ZCLI ]] || ZCLI="/usr/local/zeus/zxtm/bin/zcli"
 
 if [ -z "$ZCLI" ]; then
   echo "Can't find zcli command: $ZCLI"
